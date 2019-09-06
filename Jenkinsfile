@@ -25,12 +25,14 @@ pipeline {
                 }
             }*/
             steps{
-
-                withDockerRegistry([credentialsId: 'DOCKERHUB', url: "https://index.docker.io/v1/"]) {
-                    def image = docker.build("redbeard28/jenkins_slave:${TAG}")
+                script {
+                    /* def customImage = docker.build("redbeard28/jenkins_slave:${TAG}")
+                    customImage.push() */
+                    withDockerRegistry([credentialsId: 'DOCKERHUB', url: "https://index.docker.io/v1/"]) {
+                        def image = docker.build("redbeard28/jenkins_slave:${TAG}")
                     image.push()
+                    }
                 }
-
 
             }
         }

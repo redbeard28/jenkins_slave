@@ -1,7 +1,7 @@
 /* ADD COMMENTS TO PUSH AGAIN */
 /* Testing github __ hook */
 pipeline {
-    agent { label 'node1' }
+    agent { label 'maître' }
 
 
     environment {

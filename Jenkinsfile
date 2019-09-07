@@ -6,7 +6,7 @@ pipeline {
 
     environment {
         branchVName = 'master'
-        TAG = '0.3'
+        TAG = '0.4'
     }
 
     stages{

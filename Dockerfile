@@ -35,9 +35,12 @@ ENTRYPOINT ["jenkins-slave"]
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #  THE SOFTWARE.
+# Original source code from MAINTAINER Oleg Nenashev <o.v.nenashev@gmail.com>
+#
+# Modified original source to make docker slave jenkins to be able to access to unix:///var/run/docker.sock
 
 FROM openjdk:8-jdk-alpine
-MAINTAINER Oleg Nenashev <o.v.nenashev@gmail.com>
+MAINTAINER Jeremie CUADRADO <https://github.com/redbeard28/jenkins_slave.git>
 
 ARG VERSION=3.29
 ARG user=jenkins
@@ -52,7 +55,9 @@ LABEL Description="This is a base image, which provides the Jenkins agent execut
 
 ARG AGENT_WORKDIR=/home/${user}/agent
 
-RUN apk add --update --no-cache shadow build-base wget curl bash python python2-dev libffi-dev libressl-dev py-pip git git-lfs openssh-client openssl procps \
+RUN echo "http://dl-6.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+RUN apk update \
+  && apk add --update --no-cache docker shadow build-base wget curl bash python python2-dev libffi-dev libressl-dev py-pip git git-lfs openssh-client openssl procps \
   && curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
   && chmod 755 /usr/share/jenkins \
   && chmod 644 /usr/share/jenkins/slave.jar \
@@ -60,8 +65,13 @@ RUN apk add --update --no-cache shadow build-base wget curl bash python python2-
 USER ${user}
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
 RUN mkdir /home/${user}/.jenkins && mkdir -p ${AGENT_WORKDIR}
-RUN usermod -a -G docker jenkins
+RUN usermod -a -g docker jenkins
 RUN groupmod -g $DOCKER_GID docker
+
+RUN sysctl -w kernel.grsecurity.chroot_deny_chmod=0 && \
+    rc-update add docker boot && \
+    service docker start && \
+    docker --version
 
 VOLUME /home/${user}/.jenkins
 VOLUME ${AGENT_WORKDIR}

@@ -8,7 +8,6 @@ pipeline {
         DOCKER_NODE = ''
         branchVName = 'master'
         TAG = '0.7'
-        DOCKER_TCPIP = '192.168.1.2:2376'
     }
 
     stages{

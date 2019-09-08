@@ -8,7 +8,7 @@ pipeline {
         DOCKER_NODE = ''
         branchVName = 'master'
         TAG = '0.7'
-        DOCKER_TCP = ''
+        DOCKER_TCPIP = ''
     }
 
     stages{
@@ -35,7 +35,7 @@ pipeline {
                         /* def customImage = docker.build("redbeard28/jenkins_slave:${TAG}","--build-arg DOCKER_TCP=${DOCKER_TCP}")
                         customImage.push() */
                         withDockerRegistry([credentialsId: 'DOCKERHUB', url: "https://index.docker.io/v1/"]) {
-                            def image = docker.build("redbeard28/jenkins_slave:${TAG}")
+                            def image = docker.build("redbeard28/jenkins_slave:${TAG}","--build-arg DOCKER_TCPIP=${DOCKER_TCPIP}")
                             image.push()
                         }
                     }

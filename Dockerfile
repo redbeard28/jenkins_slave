@@ -7,7 +7,7 @@ ARG user=jenkins
 ARG group=jenkins
 ARG uid=1000
 ARG gid=1000
-ARG DOCKER_TCP
+ARG DOCKER_TCPIP
 
 USER root
 
@@ -35,7 +35,7 @@ RUN usermod -a -G docker jenkins
 RUN    docker --version
 
 USER ${user}
-RUN echo "export DOCKER_HOST=tcp://${DOCKER_TCP}" >> ~/.bashrc && \
+RUN echo "export DOCKER_HOST=tcp://${DOCKER_TCPIP}" >> ~/.bashrc && \
     source ~/.bashrc
 
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}

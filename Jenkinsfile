@@ -19,7 +19,7 @@ pipeline {
             }
             post{
                 success{
-                    echo 'Succefuly clone your repo...'
+                    echo 'Successfuly clone your repo...'
                 }
             }
         }
@@ -32,8 +32,6 @@ pipeline {
             steps{
                 script {
                     withDockerServer([uri: "tcp://${DOCKER_TCPIP}"]) {
-                        /* def customImage = docker.build("redbeard28/jenkins_slave:${TAG}","--build-arg DOCKER_TCP=${DOCKER_TCP}")
-                        customImage.push() */
                         withDockerRegistry([credentialsId: 'DOCKERHUB', url: "https://index.docker.io/v1/"]) {
                             def image = docker.build("redbeard28/jenkins_slave:${TAG}","--build-arg DOCKER_TCPIP=${DOCKER_TCPIP}")
                             image.push()

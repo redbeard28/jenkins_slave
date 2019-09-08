@@ -2,6 +2,8 @@
 
 
 pipeline {
+
+    agent any
     environment {
         DOCKER_NODE = ''
         branchVName = 'master'

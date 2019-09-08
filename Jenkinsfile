@@ -32,7 +32,7 @@ pipeline {
                 script {
                     withDockerServer([uri: "tcp://${DOCKER_TCPIP}"]) {
                         withDockerRegistry([credentialsId: 'DOCKERHUB', url: "https://index.docker.io/v1/"]) {
-                            def image = docker.build("redbeard28/jenkins_slave:${TAG}","--build-arg DOCKER_TCPIP=${DOCKER_TCPIP}","-f Dockerfile .")
+                            def image = docker.build("redbeard28/jenkins_slave:${TAG}","--build-arg DOCKER_TCPIP=${DOCKER_TCPIP} -f Dockerfile .")
                             image.push()
                         }
                     }

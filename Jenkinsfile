@@ -2,8 +2,7 @@
 
 
 pipeline {
-
-    agent any
+    agent { label DOCKER_NODE }
     environment {
 
         branchName = 'master'

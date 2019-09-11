@@ -20,7 +20,7 @@ ARG AGENT_WORKDIR=/home/${user}/agent
 #RUN echo "http://dl-6.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
 RUN echo "http://mirror1.hs-esslingen.de/pub/Mirrors/alpine/edge/community" >> /etc/apk/repositories
 RUN apk update \
-  && apk add --update --no-cache docker shadow grep build-base wget curl bash python python2-dev libffi-dev libressl-dev py-pip git git-lfs openssh-client openssl procps \
+  && apk add --update --no-cache docker shadow rsync grep build-base wget curl bash python python2-dev libffi-dev libressl-dev py-pip git git-lfs openssh-client openssl procps \
   && curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
   && chmod 755 /usr/share/jenkins \
   && chmod 644 /usr/share/jenkins/slave.jar \

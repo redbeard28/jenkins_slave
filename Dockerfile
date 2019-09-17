@@ -8,8 +8,7 @@ ARG group=jenkins
 ARG uid=1000
 ARG gid=1000
 ARG DOCKER_TCPIP
-ARG ANSIBLE_VERSION
-ARG ANSIBLE_LINT_VERSION
+
 
 USER root
 
@@ -19,25 +18,18 @@ LABEL Description="This is a base image, which provides the Jenkins agent execut
 
 ARG AGENT_WORKDIR=/home/${user}/agent
 
-#RUN echo "http://dl-6.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
 RUN echo "http://mirror1.hs-esslingen.de/pub/Mirrors/alpine/edge/community" >> /etc/apk/repositories
 RUN apk update \
   && apk add --update --no-cache docker shadow rsync grep build-base wget curl bash python python2-dev libffi-dev libressl-dev py-pip git git-lfs openssh-client openssl procps \
   && curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
   && chmod 755 /usr/share/jenkins \
-  && chmod 644 /usr/share/jenkins/slave.jar \
+  && chmod 644 /usr/share/jenkins/slave.jar
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-    && python get-pip.py --user \
-    && pip install --user ansible
+    && python get-pip.py \
+    && pip install ansible
 
 RUN usermod -a -G docker jenkins
-#RUN groupmod -g $DOCKER_GID docker
-
-#RUN sysctl -w kernel.grsecurity.chroot_deny_chmod=0 && \
-#RUN rc-update add docker boot && \
-#RUN    service docker start && \
-RUN    docker --version
 
 USER ${user}
 RUN echo "export DOCKER_HOST=tcp://${DOCKER_TCPIP}" >> ~/.bashrc && \

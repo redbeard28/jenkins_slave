@@ -8,6 +8,8 @@ ARG group=jenkins
 ARG uid=1000
 ARG gid=1000
 ARG DOCKER_TCPIP
+ARG ANSIBLE_VERSION
+ARG ANSIBLE_LINT_VERSION
 
 USER root
 
@@ -24,7 +26,10 @@ RUN apk update \
   && curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
   && chmod 755 /usr/share/jenkins \
   && chmod 644 /usr/share/jenkins/slave.jar \
-  && apk del curl
+
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python get-pip.py --user \
+    && pip install --user ansible
 
 RUN usermod -a -G docker jenkins
 #RUN groupmod -g $DOCKER_GID docker
